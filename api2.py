@@ -7,17 +7,14 @@ app = Flask(__name__)
 def next_question():
     input = request.json.get('input')
     
-    # use steaming to return HTTP chunked transfer encoding
-    
     def generate():
-        stream = chat(
-            model='surveymodel1',
+        print(input)
+        response = chat(
+            model='llama3.2',
             messages=input,
-            stream=True,
+            format='json'
         )
-        for chunk in stream:
-            print(f'the response message chunk is {chunk}')
-            yield chunk['message']['content']
+        return response['message']['content']
 
     return Response(generate(), content_type='text/plain')
 
